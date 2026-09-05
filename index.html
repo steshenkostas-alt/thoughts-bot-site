@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thoughts Bot</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  :root {
+    --bg: #f1f1ec;
+    --surface: #e9e9e2;
+    --ink: #23241f;
+    --muted: #6b6b62;
+    --accent: #2f3a66;
+    --accent-soft: #eef0f7;
+    --rule: #d9d8d0;
+    --focus: #2f3a66;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1b17;
+      --surface: #212220;
+      --ink: #ededE6;
+      --muted: #9b9a8e;
+      --accent: #9aa8ea;
+      --accent-soft: #262b3d;
+      --rule: #33342c;
+      --focus: #9aa8ea;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1b17;
+    --surface: #212220;
+    --ink: #ededE6;
+    --muted: #9b9a8e;
+    --accent: #9aa8ea;
+    --accent-soft: #262b3d;
+    --rule: #33342c;
+    --focus: #9aa8ea;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Public Sans", system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent-soft); }
+  a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+  a:focus-visible, button:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .page {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 4.5rem 1.5rem 6rem;
+  }
+
+  header.masthead {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+    margin-bottom: 2.75rem;
+  }
+  .wordmark {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: -0.01em;
+  }
+  .wordmark .dot { color: var(--accent); }
+  .masthead-meta {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .tagline {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 500;
+    font-size: 1.75rem;
+    line-height: 1.28;
+    text-wrap: balance;
+    max-width: 30ch;
+    margin: 0 0 3rem;
+  }
+
+  section + section { margin-top: 3rem; }
+  section { scroll-margin-top: 2rem; }
+
+  .eyebrow {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.9rem;
+  }
+  h2 {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 600;
+    font-size: 1.3rem;
+    margin: 0 0 0.9rem;
+    text-wrap: balance;
+  }
+  p { margin: 0 0 1rem; max-width: 62ch; color: var(--ink); }
+  p:last-child { margin-bottom: 0; }
+  p.lede { color: var(--muted); }
+
+  .fact-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.55rem 1.25rem;
+    margin-top: 1.1rem;
+    max-width: 62ch;
+  }
+  .fact-grid dt {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-top: 0.15rem;
+  }
+  .fact-grid dd { margin: 0; }
+
+  .scope-tag {
+    display: inline-block;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.82rem;
+    background: var(--accent-soft);
+    color: var(--accent);
+    border-radius: 4px;
+    padding: 0.2rem 0.5rem;
+  }
+
+  ul.plain {
+    margin: 0.4rem 0 1rem;
+    padding-left: 1.1rem;
+    max-width: 62ch;
+  }
+  ul.plain li { margin-bottom: 0.5rem; }
+  ul.plain li:last-child { margin-bottom: 0; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 3rem 0 0;
+  }
+
+  footer {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .code-box {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    padding: 1rem 1.1rem;
+    margin: 1.5rem 0 1rem;
+    max-width: 62ch;
+  }
+  .code-box code {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 0.95rem;
+    word-break: break-all;
+    flex: 1;
+  }
+  .code-box button {
+    font-family: "Public Sans", system-ui, sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .code-box button:hover { filter: brightness(0.96); }
+  :root:not([data-theme="light"]) .code-box button:hover { filter: brightness(1.15); }
+</style>
+</head>
+<body>
+
+<div class="page" id="oauth-callback" hidden>
+  <header class="masthead">
+    <div class="wordmark">Thoughts Bot<span class="dot">.</span></div>
+    <div class="masthead-meta">Google Calendar</div>
+  </header>
+  <p class="eyebrow" id="oauth-eyebrow">Подключение календаря</p>
+  <h2 id="oauth-title" style="font-size:1.6rem;"></h2>
+  <p id="oauth-body"></p>
+  <div class="code-box" id="oauth-code-box" hidden>
+    <code id="oauth-code"></code>
+    <button id="oauth-copy" type="button">Скопировать</button>
+  </div>
+</div>
+
+<div class="page" id="main-content">
+
+  <header class="masthead">
+    <div class="wordmark">Thoughts Bot<span class="dot">.</span></div>
+    <div class="masthead-meta">private &middot; single user</div>
+  </header>
+
+  <p class="tagline">A private Telegram notebook for one person &mdash; voice and text notes, tagged and searchable, with the occasional meeting sent to a calendar.</p>
+
+  <section id="home">
+    <p class="eyebrow">What this is</p>
+    <h2>A personal note-taking assistant</h2>
+    <p>Thoughts Bot is a Telegram bot built for a single named user. Sent a voice memo or a line of text, it transcribes, tags, and files the note, then makes it searchable later by meaning, not just keywords. When a note describes a meeting or a call with a date and time, the bot can add it to that user&rsquo;s Google Calendar.</p>
+    <p>It is not a public product, does not accept sign-ups, and is not offered or marketed to anyone beyond its one operator.</p>
+
+    <dl class="fact-grid">
+      <dt>Operator</dt>
+      <dd>Stanislav Steshenko</dd>
+      <dt>Contact</dt>
+      <dd><a href="mailto:steshenkostas@gmail.com">steshenkostas@gmail.com</a></dd>
+      <dt>Google scope</dt>
+      <dd><span class="scope-tag">.../auth/calendar.events</span> &mdash; create, read, and remove events this app creates. Nothing else in the account.</dd>
+    </dl>
+  </section>
+
+  <hr class="divider">
+
+  <section id="privacy">
+    <p class="eyebrow">Privacy policy</p>
+    <h2>What the calendar connection touches</h2>
+    <p class="lede">Last updated 2026-09-05.</p>
+
+    <p>When a note describes a meeting, the text of that one note &mdash; a title, a date and time, and a short description drawn from the note itself &mdash; is sent to the Google Calendar API to create a single event. That is the entire extent of what leaves the user&rsquo;s own server for this purpose.</p>
+
+    <ul class="plain">
+      <li><strong>No other Google data is requested.</strong> The connected scope covers only events this app creates, edits, or deletes &mdash; not mail, contacts, files, or any other calendar the account can see.</li>
+      <li><strong>Nothing is sold, shared, or shown to anyone else.</strong> There are no advertising partners, analytics vendors, or data brokers involved anywhere in this app.</li>
+      <li><strong>Nothing is retained beyond the event itself.</strong> The app keeps no separate copy, log, or backup of calendar data once an event is created; the note it came from stays only on the user&rsquo;s own private server.</li>
+      <li><strong>Access can be revoked at any time</strong> from the user&rsquo;s Google Account permissions page, which immediately stops the app from reaching the calendar.</li>
+    </ul>
+
+    <p>Questions about this policy, or a request to delete anything created by this app, can be sent to <a href="mailto:steshenkostas@gmail.com">steshenkostas@gmail.com</a>.</p>
+  </section>
+
+  <footer>
+    <span>Thoughts Bot &mdash; a private project, not a public service.</span>
+    <span><a href="#privacy">Privacy policy</a></span>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var code = params.get("code");
+  var error = params.get("error");
+  if (!code && !error) return;
+
+  document.getElementById("main-content").hidden = true;
+  var cb = document.getElementById("oauth-callback");
+  cb.hidden = false;
+
+  var title = document.getElementById("oauth-title");
+  var body = document.getElementById("oauth-body");
+  var box = document.getElementById("oauth-code-box");
+  var codeEl = document.getElementById("oauth-code");
+
+  if (code) {
+    title.textContent = "Готово — остался один шаг";
+    body.textContent = "Скопируй код ниже и пришли его Стасу в Telegram, чтобы он подключил календарь.";
+    codeEl.textContent = code;
+    box.hidden = false;
+  } else {
+    title.textContent = "Доступ не выдан";
+    body.textContent = "Google вернул отказ (" + error + "). Попробуй ещё раз со ссылки от Стаса, или напиши ему, если это повторится.";
+  }
+
+  document.getElementById("oauth-copy").addEventListener("click", function () {
+    var btn = this;
+    navigator.clipboard.writeText(codeEl.textContent).then(function () {
+      btn.textContent = "Скопировано";
+      setTimeout(function () { btn.textContent = "Скопировать"; }, 1500);
+    });
+  });
+})();
+</script>
+</body>
+</html>
